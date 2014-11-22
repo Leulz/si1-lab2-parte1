@@ -1,0 +1,27 @@
+@(metas : List[Meta])
+
+<html lang="">
+    <head>
+        <title>Controle de Metas</title>
+        <meta charset="UTF-8">
+        <meta name=description content="">
+        <meta name=viewport content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap CSS -->
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" media="screen">
+    </head>
+    <body>
+    	<div class="content">
+    		<div class="jumbotron">
+    			<h1>Bem-vindo ao sistema de acompanhamento de metas semanais!</h1>
+    		</div>
+    		<div class="col-sm-5">
+    			<h2 class="text-center">@metas.size() meta(s)</h2>
+    			@for(meta <- metas){
+    				<td>Meta: @meta.getDescricao()</td>
+    			}
+    		</div>
+    		
+    	</div>
+    </body>
+</html>
