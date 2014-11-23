@@ -12,13 +12,23 @@
     </head>
     <body>
     	<div class="content">
+    	<br>
     		<div class="jumbotron">
-    			<h1>Bem-vindo ao sistema de acompanhamento de metas semanais!</h1>
+    			<h1 style="text-align: center"'>Sistema de acompanhamento de metas semanais.</h1>
     		</div>
     		<div class="col-sm-5">
     			<h2 class="text-center">@metas.size() meta(s)</h2>
     			@for(meta <- metas){
-    				<td>Meta: @meta.getDescricao()</td>
+    				@if(meta.equals(metas.get(0))){
+	    					<h1>Semana @meta.getSemana()</h1>
+	    					<td>Meta: @meta.getDescricao()</td>
+	    					<br>
+	    				}else{ 
+	    					@if(meta.getSemana() != metas.get(metas.indexOf(meta)-1).getSemana()){
+	    						<h1>Semana @meta.getSemana()</h1>
+	    					}
+	    					<td>Meta: @meta.getDescricao()</td>
+	    				}	    				
     			}
     		</div>
     		
