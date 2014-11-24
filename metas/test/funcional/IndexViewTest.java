@@ -102,7 +102,8 @@ public class IndexViewTest extends AbstractTest{
     	//TODO
     	Map<String, String> formData = new HashMap<String, String>();
 		formData.put("id", "1");
-		List<Meta> metas = dao.findAllByClass(Meta.class);		
+		dao.persist(meta1);
+		List<Meta> metas = dao.findAllByClass(Meta.class);	
 		Result result = callAction(controllers.routes.ref.Application.deleteMeta(), fakeRequest()
 						.withFormUrlEncodedBody(formData));
 		assertThat(metas.size()).isEqualTo(0);
