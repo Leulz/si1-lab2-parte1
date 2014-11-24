@@ -14,22 +14,87 @@
     	<div class="content">
     	<br>
     		<div class="jumbotron">
-    			<h1 style="text-align: center"'>Sistema de acompanhamento de metas semanais.</h1>
+    			<h1 style="text-align: center">Sistema de acompanhamento de metas semanais.</h1>
     		</div>
     		<div class="col-sm-5">
     			<h2 class="text-center">@metas.size() meta(s)</h2>
     			@for(meta <- metas){
     				@if(meta.equals(metas.get(0))){
-	    					<h1>Semana @meta.getSemana()</h1>
-	    					<td>Meta: @meta.getDescricao()</td>
-	    					<br>
+    						<h2>Semana @meta.getSemana()</h2>
+    						@if(!meta.isCumprida()){    							
+    							<div class="alert alert-info" role="alert" id="successPanel">
+    							<p>Meta: @meta.getDescricao()</p>
+    							<div style="display: none;">
+    								<form method="post" id="cumprirMeta" action="@routes.Application.cumprirMeta()">
+			    						<input type="hidden" name="id" value="@meta.getId()">
+					            	</form>
+					            </div>
+					            <button style="position: relative; bottom: 20px;" type="submit" class="close" id="cumprir1" form="cumprirMeta"><span aria-hidden="true">&#10003;</span>
+					            <span class="sr-only">Cumprir meta</span></button>
+					            <div style="display: none;">
+    								<form method="post" id="deleteMeta" action="@routes.Application.deleteMeta()">
+    									<input type="hidden" name="id" value="@meta.getId()">            
+					            	</form>
+					            </div>			    					
+					            	<button form="deleteMeta" style="position: relative; bottom: 20px;" type="submit" class="close" id="deleta1"><span aria-hidden="true">&times;</span>
+					            	<span class="sr-only">Cumprir meta</span></button>					            	
+					        	</div>
+                            }else{
+    							<div class="alert alert-success" role="alert" id="successPanel">					            	
+					            	<p>Meta: @meta.getDescricao()</p>
+					        	</div>
+                            }
 	    				}else{ 
 	    					@if(meta.getSemana() != metas.get(metas.indexOf(meta)-1).getSemana()){
 	    						<h1>Semana @meta.getSemana()</h1>
 	    					}
-	    					<td>Meta: @meta.getDescricao()</td>
-	    				}	    				
+	    					@if(!meta.isCumprida()){
+    							<form method="post" action="@routes.Application.cumprirMeta()">
+    							<div class="alert alert-info" role="alert" id="successPanel">
+			    					<input type="hidden" name="id" value="@meta.getId()">
+					            	<button type="submit" class="close" id="cumprir1"><span aria-hidden="true">&#10003;</span>
+					            	<span class="sr-only">Cumprir meta</span></button>
+					            	</form>
+    								<form method="post" id="deleteMeta" action="@routes.Application.deleteMeta()">
+    									<input type="hidden" name="id" value="@meta.getId()">
+    									<button type="submit" class="close" id="deleta1"><span aria-hidden="true">&times;</span>
+					            		<span class="sr-only">Cumprir meta</span></button>
+    								</form>
+					            	<p style="">Meta: @meta.getDescricao()</p>
+					        	</div>
+                            }else{
+    							<div class="alert alert-success" role="alert" id="successPanel">					            	
+					            	<p>Meta: @meta.getDescricao()</p>
+					        	</div>
+                            }
+	    				}    				
     			}
+    		</div>
+    		<div class="col-sm-5">
+    			<h2>Cadastrar metas</h2>
+    			<form method="post" action="@routes.Application.newMeta()" id="novaMeta">
+    				<label for="descricao">Descrição da meta:</label>
+    				<input type="text" id="descricao" class="form-control" required="required" name="descricao">
+    				
+    				<label for="semana">Quero que esta meta seja cumprida até daqui a:</label>
+    				<select class="form-control" required="required" id="semana" name="semana" form="novaMeta">
+    					<option value="1">1 semana</option>
+    					<option value="2">2 semanas</option>
+    					<option value="3">3 semanas</option>
+    					<option value="4">4 semanas</option>
+    					<option value="5">5 semanas</option>
+    					<option value="6">6 semanas</option>
+    				</select>
+    				<label for="prioridade">A prioridade desta meta é:</label>
+    				<select class="form-control" required="required" id="prioridade" name="prioridade" form="novaMeta">
+    					<option value="3">Alta</option>
+    					<option value="2">Média</option>
+    					<option value="1">Baixa</option>
+    				</select>
+    				
+    				<input type="submit" class="btn btn-primary" value="Registrar meta">
+    				    
+    			</form>
     		</div>
     		
     	</div>

@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import models.Meta;
 import models.dao.GenericDAO;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import base.AbstractTest;
@@ -29,7 +29,7 @@ public class IndexViewTest extends AbstractTest{
 	Meta meta1 = new Meta("Aprender Play",1,1);
 	Meta meta2 = new Meta("Aprender AJAX", 1,2);
 	Meta meta3 = new Meta("Aprender filosofia schopenhaueriana",2,1);
-	
+		
 	@Test
 	public void deveAparecerMetaAdicionada() {
 		dao.persist(meta1);
@@ -82,14 +82,29 @@ public class IndexViewTest extends AbstractTest{
 		formData.put("prioridade", "2");
 		Result result = callAction(controllers.routes.ref.Application.newMeta(), fakeRequest()
 						.withFormUrlEncodedBody(formData));
-		GenericDAO dao = new GenericDAO();
-		List<Meta> livros = dao.findAllByClass(Meta.class);
-		assertThat(livros.size()).isEqualTo(1);
-        assertThat(livros.get(0).getDescricao()).isEqualTo("Aprender Play");
+		List<Meta> metas = dao.findAllByClass(Meta.class);
+		assertThat(metas.size()).isEqualTo(1);
+        assertThat(metas.get(0).getDescricao()).isEqualTo("Aprender Play");
 		List<Meta> result2 = dao.findByAttributeName("Meta", 
 				"descricao", "Aprender Play");	
 		assertThat(result2.size()).isEqualTo(1);
 		assertThat(result2.get(0).getSemana()).isEqualTo(3);
 		assertThat(result2.get(0).getPrioridade()).isEqualTo(2);
+    }
+    
+    @Test
+    public void deveCumprirMeta(){
+    	//TODO
+    }
+    
+    @Test
+    public void deveDeletarMeta(){
+    	//TODO
+    	Map<String, String> formData = new HashMap<String, String>();
+		formData.put("id", "1");
+		List<Meta> metas = dao.findAllByClass(Meta.class);		
+		Result result = callAction(controllers.routes.ref.Application.deleteMeta(), fakeRequest()
+						.withFormUrlEncodedBody(formData));
+		assertThat(metas.size()).isEqualTo(0);
     }
 }

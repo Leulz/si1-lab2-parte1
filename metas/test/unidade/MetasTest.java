@@ -50,4 +50,13 @@ public class MetasTest extends AbstractTest{
     	Collections.sort(metas);
     	assertThat(metas.get(0).getDescricao()).isEqualTo("Aprender AJAX");	
     }
+    
+    @Test
+    public void deveConseguirCumprirMeta(){
+    	dao.persist(meta1);
+    	metas = dao.findAllByClass(Meta.class);
+    	assertThat(metas.get(0).isCumprida()).isFalse();
+    	metas.get(0).setCumprida(true);
+    	assertThat(metas.get(0).isCumprida()).isTrue();
+    }
 }

@@ -7,4 +7,6 @@ GET     /                           controllers.Application.index()
 
 # Map static resources from the /public folder to the /assets URL path
 POST    /meta                       controllers.Application.newMeta()
+POST    /cumprirMeta                controllers.Application.cumprirMeta()
+POST    /deleteMeta                 controllers.Application.deleteMeta()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
