@@ -15,6 +15,22 @@ public class Application extends Controller {
 	private static final GenericDAO dao = new GenericDAO();
 	private static Form<Meta> metaForm = Form.form(Meta.class);
 	private static int metasCump, metasNaoCump;
+	public static int getMetasCump() {
+		return metasCump;
+	}
+
+	public static void setMetasCump(int metasCump) {
+		Application.metasCump = metasCump;
+	}
+
+	public static int getMetasNaoCump() {
+		return metasNaoCump;
+	}
+
+	public static void setMetasNaoCump(int metasNaoCump) {
+		Application.metasNaoCump = metasNaoCump;
+	}
+
 	@Transactional
     public static Result index() {
 		List<Meta> metas = dao.findAllByClass(Meta.class);
@@ -70,7 +86,8 @@ public class Application extends Controller {
 			if (metas.size()==0)
 				return redirect(routes.Application.index());
 			Long id = Long.parseLong(filledForm.data().get("id"));
-			dao.removeById(Meta.class, id);;
+			dao.removeById(Meta.class, id);
+			dao.flush();
 			return redirect(routes.Application.index());
 		}
 	}

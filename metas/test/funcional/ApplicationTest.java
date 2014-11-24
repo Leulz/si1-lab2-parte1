@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import base.AbstractTest;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
 import models.Meta;
 import models.dao.GenericDAO;
+
+import base.AbstractTest;
 
 import org.junit.*;
 
@@ -35,6 +35,9 @@ import static org.fest.assertions.Assertions.*;
 public class ApplicationTest extends AbstractTest{
 	GenericDAO dao = new GenericDAO();
     List<Meta> metas;
+    int metasCump = controllers.Application.getMetasCump();
+	int metasNaoCump = controllers.Application.getMetasNaoCump();
+	
     @Test
     public void simpleCheck() {
         int a = 1 + 1;
@@ -44,7 +47,7 @@ public class ApplicationTest extends AbstractTest{
     @Test
     public void renderTemplate() {
     	metas = dao.findAllByClass(Meta.class);
-        Content html = views.html.index.render(metas);
+        Content html = views.html.index.render(metas,metasCump,metasNaoCump);
         assertThat(contentType(html)).isEqualTo("text/html");
         assertThat(contentAsString(html)).contains("0 meta(s)");
     }

@@ -29,13 +29,15 @@ public class IndexViewTest extends AbstractTest{
 	Meta meta1 = new Meta("Aprender Play",1,1);
 	Meta meta2 = new Meta("Aprender AJAX", 1,2);
 	Meta meta3 = new Meta("Aprender filosofia schopenhaueriana",2,1);
+	int metasCump = controllers.Application.getMetasCump();
+	int metasNaoCump = controllers.Application.getMetasNaoCump();
 		
 	@Test
 	public void deveAparecerMetaAdicionada() {
 		dao.persist(meta1);
 		metas = dao.findAllByClass(Meta.class);
 		
-		Html html = index.render(metas);
+		Html html = index.render(metas,metasCump,metasNaoCump);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Aprender Play");		
 	}
@@ -47,7 +49,7 @@ public class IndexViewTest extends AbstractTest{
     	
 		metas = dao.findAllByClass(Meta.class);
 		
-		Html html = index.render(metas);
+		Html html = index.render(metas,metasCump,metasNaoCump);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Semana 1");
 		assertThat(contentAsString(html)).contains("Aprender AJAX");
@@ -64,7 +66,7 @@ public class IndexViewTest extends AbstractTest{
 		metas = dao.findAllByClass(Meta.class);
 		Collections.sort(metas);
 		
-		Html html = index.render(metas);
+		Html html = index.render(metas,metasCump,metasNaoCump);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Semana 1");
 		assertThat(contentAsString(html)).contains("Semana 2");
@@ -103,9 +105,12 @@ public class IndexViewTest extends AbstractTest{
     	Map<String, String> formData = new HashMap<String, String>();
 		formData.put("id", "1");
 		dao.persist(meta1);
-		List<Meta> metas = dao.findAllByClass(Meta.class);	
+		dao.flush();
+		List<Meta> metas = dao.findAllByClass(Meta.class);
+		assertThat(metas.size()).isEqualTo(1);
 		Result result = callAction(controllers.routes.ref.Application.deleteMeta(), fakeRequest()
 						.withFormUrlEncodedBody(formData));
+		metas = dao.findAllByClass(Meta.class);
 		assertThat(metas.size()).isEqualTo(0);
     }
 }
