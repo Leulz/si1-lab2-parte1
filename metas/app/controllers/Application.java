@@ -14,12 +14,13 @@ import views.html.*;
 public class Application extends Controller {
 	private static final GenericDAO dao = new GenericDAO();
 	private static Form<Meta> metaForm = Form.form(Meta.class);
-	
+	private static int metasCump, metasNaoCump;
 	@Transactional
     public static Result index() {
 		List<Meta> metas = dao.findAllByClass(Meta.class);
 		Collections.sort(metas);
-        return ok(views.html.index.render(metas));
+        contaCumpridas();
+        return ok(views.html.index.render(metas,metasCump,metasNaoCump));
     }
 	
 	@Transactional
@@ -27,7 +28,7 @@ public class Application extends Controller {
 		Form<Meta> filledForm = metaForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
             List<Meta> result = dao.findAllByClass(Meta.class);
-			return badRequest(views.html.index.render(result));
+			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
 		} else {
             Meta novoMeta = filledForm.get();
             
@@ -47,7 +48,7 @@ public class Application extends Controller {
 		
 		if (filledForm.hasErrors()) {
 			List<Meta> result = dao.findAllByClass(Meta.class);
-			return badRequest(views.html.index.render(result));
+			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
 		} else{
 			long id = Long.parseLong(filledForm.data().get("id"));
 			Meta meta = dao.findByEntityId(Meta.class, id);
@@ -63,7 +64,7 @@ public class Application extends Controller {
 		
 		if (filledForm.hasErrors()) {
 			List<Meta> result = dao.findAllByClass(Meta.class);
-			return badRequest(views.html.index.render(result));
+			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
 		} else{
 			List<Meta> metas = dao.findAllByClass(Meta.class);
 			if (metas.size()==0)
@@ -71,6 +72,18 @@ public class Application extends Controller {
 			Long id = Long.parseLong(filledForm.data().get("id"));
 			dao.removeById(Meta.class, id);;
 			return redirect(routes.Application.index());
+		}
+	}
+	@Transactional
+	public static void contaCumpridas(){
+		List<Meta> metas = dao.findAllByClass(Meta.class);
+		metasCump=0;
+		metasNaoCump=0;
+		for (Meta meta : metas) {
+			if (meta.isCumprida())
+				metasCump+=1;
+			else
+				metasNaoCump+=1;
 		}
 	}
 }

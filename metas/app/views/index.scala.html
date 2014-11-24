@@ -1,4 +1,4 @@
-@(metas : List[Meta])
+@(metas : List[Meta])(contCump : Int)(contNaoCump : Int)
 
 <html lang="">
     <head>
@@ -18,6 +18,8 @@
     		</div>
     		<div class="col-sm-5">
     			<h2 class="text-center">@metas.size() meta(s)</h2>
+    			<h2 class="text-center">@contCump meta(s) cumprida(s)</h2>
+    			<h2 class="text-center">@contNaoCump meta(s) não cumprida(s)</h2>
     			@for(meta <- metas){
     				@if(meta.equals(metas.get(0))){
     						<h2>Semana @meta.getSemana()</h2>
