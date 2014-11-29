@@ -1,3 +1,5 @@
+import java.util.List;
+
 import models.Meta;
 import models.dao.GenericDAO;
 import play.Application;
@@ -41,5 +43,19 @@ public class Global extends GlobalSettings {
                 
                 dao.flush();                
             }});
+    }
+    
+    @Override
+    public void onStop(Application app){
+    	JPA.withTransaction(new play.libs.F.Callback0() {
+            @Override
+            public void invoke() throws Throwable {
+            	Logger.info("Aplicação finalizando...");
+            	List<Meta> metas = dao.findAllByClass(Meta.class);
+            	
+            	for (Meta meta : metas) {
+        			dao.removeById(Meta.class, meta.getId());
+        		}                
+            }});    	
     }
 }

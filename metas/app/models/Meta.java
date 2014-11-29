@@ -1,5 +1,6 @@
 package models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,12 @@ import javax.persistence.Id;
 
 
 @Entity(name = "Meta")
-public class Meta implements Comparable<Meta>{
+public class Meta implements Comparable<Meta>, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -81,5 +87,9 @@ public class Meta implements Comparable<Meta>{
 	}
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

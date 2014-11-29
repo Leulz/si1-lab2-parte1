@@ -1,7 +1,6 @@
 package funcional;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
 import static play.test.Helpers.callAction;
 import static play.test.Helpers.contentAsString;
 import static play.test.Helpers.contentType;
@@ -15,13 +14,12 @@ import java.util.Map;
 import models.Meta;
 import models.dao.GenericDAO;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import base.AbstractTest;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import views.html.index;
+import base.AbstractTest;
 
 public class IndexViewTest extends AbstractTest{
 	GenericDAO dao = new GenericDAO();
@@ -96,20 +94,45 @@ public class IndexViewTest extends AbstractTest{
     
     @Test
     public void deveCumprirMeta(){
-    	//TODO
+    	Map<String, String> formData = new HashMap<String, String>();
+		formData.put("descricao", "Aprender Play");
+		formData.put("semana", "3");
+		formData.put("prioridade", "2");
+		List<Meta> metas = dao.findAllByClass(Meta.class);
+		assertThat(metas.size()).isEqualTo(0);
+		Result result1 = callAction(controllers.routes.ref.Application.newMeta(), fakeRequest()
+				.withFormUrlEncodedBody(formData));
+		dao.flush();
+		metas = dao.findAllByClass(Meta.class);
+		assertThat(metas.size()).isEqualTo(1);
+		assertThat(metas.get(0).isCumprida()).isFalse();
+		formData = new HashMap<String, String>();
+		formData.put("id", "1");
+		long id = Long.parseLong("1");
+		Meta meta = dao.findByEntityId(Meta.class, id);			
+		meta.setCumprida(true);
+		dao.merge(meta);
+		dao.flush();
+		assertThat(meta.isCumprida()).isTrue();
     }
-    
     @Test
     public void deveDeletarMeta(){
-    	//TODO
     	Map<String, String> formData = new HashMap<String, String>();
-		formData.put("id", "1");
-		dao.persist(meta1);
-		dao.flush();
+		formData.put("descricao", "Aprender Play");
+		formData.put("semana", "3");
+		formData.put("prioridade", "2");
 		List<Meta> metas = dao.findAllByClass(Meta.class);
+		assertThat(metas.size()).isEqualTo(0);
+		Result result1 = callAction(controllers.routes.ref.Application.newMeta(), fakeRequest()
+				.withFormUrlEncodedBody(formData));
+		dao.flush();
+		metas = dao.findAllByClass(Meta.class);
 		assertThat(metas.size()).isEqualTo(1);
+		formData = new HashMap<String, String>();
+		formData.put("id", "1");
 		Result result = callAction(controllers.routes.ref.Application.deleteMeta(), fakeRequest()
-						.withFormUrlEncodedBody(formData));
+				.withFormUrlEncodedBody(formData));
+		dao.flush();
 		metas = dao.findAllByClass(Meta.class);
 		assertThat(metas.size()).isEqualTo(0);
     }

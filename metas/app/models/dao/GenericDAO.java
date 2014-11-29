@@ -2,6 +2,7 @@ package models.dao;
 
 import java.util.List;
 
+import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
 import play.db.jpa.JPA;
@@ -53,7 +54,7 @@ public class GenericDAO {
 		Query hqlQuery = JPA.em().createQuery(hql);
 		return hqlQuery.getResultList();
 	}
-
+	
     /**
      * Deleta do banco de dados uma {@code classe} referenciada pelo seu
      * {@code id}.

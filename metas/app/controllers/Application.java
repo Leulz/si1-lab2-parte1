@@ -67,9 +67,12 @@ public class Application extends Controller {
 			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
 		} else{
 			long id = Long.parseLong(filledForm.data().get("id"));
-			Meta meta = dao.findByEntityId(Meta.class, id);
-			Logger.debug("Meta achada: " + meta.getDescricao());
+			Meta meta = dao.findByEntityId(Meta.class, id);			
 			meta.setCumprida(true);
+			dao.merge(meta);
+			dao.flush();
+			meta = dao.findByEntityId(Meta.class, id);
+			Logger.debug("Meta achada: " + meta.getDescricao() + " | Cumprida: "+meta.isCumprida());
 			return redirect(routes.Application.index());
 		}
 	}
@@ -77,7 +80,6 @@ public class Application extends Controller {
 	@Transactional
 	public static Result deleteMeta(){
 		Form<Meta> filledForm = metaForm.bindFromRequest();
-		
 		if (filledForm.hasErrors()) {
 			List<Meta> result = dao.findAllByClass(Meta.class);
 			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
@@ -91,7 +93,7 @@ public class Application extends Controller {
 			return redirect(routes.Application.index());
 		}
 	}
-	@Transactional
+	//@Transactional
 	public static void contaCumpridas(){
 		List<Meta> metas = dao.findAllByClass(Meta.class);
 		metasCump=0;
