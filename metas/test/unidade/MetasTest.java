@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import models.Meta;
-import models.Semana;
 import models.dao.GenericDAO;
 
 import org.junit.Test;

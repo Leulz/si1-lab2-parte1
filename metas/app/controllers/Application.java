@@ -15,22 +15,7 @@ public class Application extends Controller {
 	private static final GenericDAO dao = new GenericDAO();
 	private static Form<Meta> metaForm = Form.form(Meta.class);
 	private static int metasCump, metasNaoCump;
-	public static int getMetasCump() {
-		return metasCump;
-	}
-
-	public static void setMetasCump(int metasCump) {
-		Application.metasCump = metasCump;
-	}
-
-	public static int getMetasNaoCump() {
-		return metasNaoCump;
-	}
-
-	public static void setMetasNaoCump(int metasNaoCump) {
-		Application.metasNaoCump = metasNaoCump;
-	}
-
+	
 	@Transactional
     public static Result index() {
 		List<Meta> metas = dao.findAllByClass(Meta.class);
@@ -104,5 +89,21 @@ public class Application extends Controller {
 			else
 				metasNaoCump+=1;
 		}
+	}
+	
+	public static int getMetasCump() {
+		return metasCump;
+	}
+
+	public static void setMetasCump(int metasCump) {
+		Application.metasCump = metasCump;
+	}
+
+	public static int getMetasNaoCump() {
+		return metasNaoCump;
+	}
+
+	public static void setMetasNaoCump(int metasNaoCump) {
+		Application.metasNaoCump = metasNaoCump;
 	}
 }
