@@ -14,14 +14,26 @@ import java.util.Map;
 import models.Meta;
 import models.dao.GenericDAO;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import play.GlobalSettings;
+import play.db.jpa.JPA;
+import play.db.jpa.JPAPlugin;
 import play.mvc.Result;
+import play.test.FakeApplication;
+import play.test.Helpers;
 import play.twirl.api.Html;
+import scala.Option;
 import views.html.index;
-import base.AbstractTest;
 
-public class IndexViewTest extends AbstractTest{
+import javax.persistence.EntityManager;
+
+
+
+
+public class IndexViewTest {
 	GenericDAO dao = new GenericDAO();
 	List<Meta> metas;
 	Meta meta1 = new Meta("Aprender Play",1,1);
@@ -29,7 +41,18 @@ public class IndexViewTest extends AbstractTest{
 	Meta meta3 = new Meta("Aprender filosofia schopenhaueriana",2,1);
 	int metasCump = controllers.Application.getMetasCump();
 	int metasNaoCump = controllers.Application.getMetasNaoCump();
-		
+    public EntityManager em;
+
+	@Before
+    public void setUp() {
+        FakeApplication app = Helpers.fakeApplication(new GlobalSettings());
+        Helpers.start(app);
+        Option<JPAPlugin> jpaPlugin = app.getWrappedApplication().plugin(JPAPlugin.class);
+        em = jpaPlugin.get().em("default");
+        JPA.bindForCurrentThread(em);
+        em.getTransaction().begin();
+    }
+	
 	@Test
 	public void deveAparecerMetaAdicionada() {
 		dao.persist(meta1);
@@ -135,5 +158,12 @@ public class IndexViewTest extends AbstractTest{
 		dao.flush();
 		metas = dao.findAllByClass(Meta.class);
 		assertThat(metas.size()).isEqualTo(0);
+    }
+    
+    @After
+    public void tearDown() {
+        em.getTransaction().commit();
+        JPA.bindForCurrentThread(null);
+        em.close();
     }
 }
