@@ -116,6 +116,31 @@ public class IndexViewTest {
     }
     
     @Test
+    public void deveFazerComQueMetaDeletadaSuma() {
+    	Map<String, String> formData = new HashMap<String, String>();
+		formData.put("descricao", "Aprender Play");
+		formData.put("semana", "3");
+		formData.put("prioridade", "2");
+		Result result1 = callAction(controllers.routes.ref.Application.newMeta(), fakeRequest()
+						.withFormUrlEncodedBody(formData));
+		metas = dao.findAllByClass(Meta.class);
+		assertThat(metas.size()==1).isTrue();
+		Html html = index.render(metas,metasCump,metasNaoCump);
+		assertThat(contentType(html)).isEqualTo("text/html");
+		assertThat(contentAsString(html)).contains("Aprender Play");
+		
+		formData = new HashMap<String, String>();
+		formData.put("id", "1");
+		Result result2 = callAction(controllers.routes.ref.Application.deleteMeta(), fakeRequest()
+				.withFormUrlEncodedBody(formData));
+		
+		metas = dao.findAllByClass(Meta.class);
+		html = index.render(metas,metasCump,metasNaoCump);
+		assertThat(contentType(html)).isEqualTo("text/html");
+		assertThat(contentAsString(html)).doesNotContain("Aprender Play");		
+    }
+    
+    @Test
     public void deveCumprirMeta(){
     	Map<String, String> formData = new HashMap<String, String>();
 		formData.put("descricao", "Aprender Play");
