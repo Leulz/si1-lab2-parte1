@@ -141,6 +141,55 @@ public class IndexViewTest {
     }
     
     @Test
+    public void deveCriaMetaComoNaoCumprida() {
+    	Map<String, String> formData = new HashMap<String, String>();
+		formData.put("descricao", "Aprender Play");
+		formData.put("semana", "3");
+		formData.put("prioridade", "2");
+		Result result = callAction(controllers.routes.ref.Application.newMeta(), fakeRequest()
+						.withFormUrlEncodedBody(formData));
+		metas = dao.findAllByClass(Meta.class);
+		Html html = index.render(metas,metasCump,metasNaoCump);
+		assertThat(contentType(html)).isEqualTo("text/html");
+		assertThat(contentAsString(html)).contains("alert-info");		
+    }
+
+    //por alguma razao que nem com a ajuda dos monitores consegui achar,
+    //se eu chamo cumprirMeta() do Application.java a mudanca nao e visivel dentro
+    //do teste. Dai o fato de eu estar modificando diretamente o estado de "cumprida"
+    //da meta, ao invés de usar callAction.
+    @Test
+    public void deveSerVisivelMudancaDeMetaCumprida() {
+    	Map<String, String> formData = new HashMap<String, String>();
+		formData.put("descricao", "Aprender Play");
+		formData.put("semana", "3");
+		formData.put("prioridade", "2");
+		List<Meta> metas = dao.findAllByClass(Meta.class);
+		assertThat(metas.size()).isEqualTo(0);
+		Result result1 = callAction(controllers.routes.ref.Application.newMeta(), fakeRequest()
+				.withFormUrlEncodedBody(formData));
+		dao.flush();
+		metas = dao.findAllByClass(Meta.class);
+		
+		Html html = index.render(metas,metasCump,metasNaoCump);
+		assertThat(contentType(html)).isEqualTo("text/html");
+		assertThat(contentAsString(html)).contains("alert-info");
+		
+		assertThat(metas.size()).isEqualTo(1);		
+		formData = new HashMap<String, String>();
+		formData.put("id", "1");
+		long id = Long.parseLong("1");
+		Meta meta = dao.findByEntityId(Meta.class, id);			
+		meta.setCumprida(true);
+		dao.merge(meta);
+		dao.flush();
+		metas = dao.findAllByClass(Meta.class);
+		html = index.render(metas,metasCump,metasNaoCump);
+		assertThat(contentAsString(html)).contains("alert-success");
+		
+    }
+    
+    @Test
     public void deveCumprirMeta(){
     	Map<String, String> formData = new HashMap<String, String>();
 		formData.put("descricao", "Aprender Play");
