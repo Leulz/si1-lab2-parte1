@@ -25,7 +25,7 @@
     						<h2>Semana @meta.getSemana()</h2>
     						@if(!meta.isCumprida()){    							
     							<div class="alert alert-info" role="alert" id="successPanel">
-    							<p>Meta: @meta.getDescricao()</p>
+    							<p>@meta.getDescricao()</p>
     							<div style="display: none;">
     								<form method="post" id="cumprirMeta" action="@routes.Application.cumprirMeta()">
 			    						<input type="hidden" name="id" value="@meta.getId()">
@@ -43,7 +43,7 @@
 					        	</div>
                             }else{
     							<div class="alert alert-success" role="alert" id="successPanel">					            	
-					            	<p>Meta: @meta.getDescricao()</p>
+					            	<p>@meta.getDescricao()</p>
 					        	</div>
                             }
 	    				}else{ 
@@ -62,11 +62,11 @@
     									<button type="submit" class="close" id="deleta1"><span aria-hidden="true">&times;</span>
 					            		<span class="sr-only">Cumprir meta</span></button>
     								</form>
-					            	<p style="">Meta: @meta.getDescricao()</p>
+					            	<p style="">@meta.getDescricao()</p>
 					        	</div>
                             }else{
     							<div class="alert alert-success" role="alert" id="successPanel">					            	
-					            	<p>Meta: @meta.getDescricao()</p>
+					            	<p>@meta.getDescricao()</p>
 					        	</div>
                             }
 	    				}    				
