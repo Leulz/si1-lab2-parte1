@@ -75,5 +75,7 @@ public class ApplicationTest {
         em.getTransaction().commit();
         JPA.bindForCurrentThread(null);
         em.close();
+        controllers.Application.setMetasCump(0);
+        controllers.Application.setMetasNaoCump(0);
     }
 }
