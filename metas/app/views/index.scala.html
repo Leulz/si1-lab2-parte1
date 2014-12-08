@@ -1,4 +1,4 @@
-@(metas : List[Meta])(contCump : Int)(contNaoCump : Int)
+@(metas : List[Meta])(contCump : Int)(contNaoCump : Int)(totalSemana : Array[Int])(cumpSemana : Array[Int])(naoCumpSemana : Array[Int])
 
 <html lang="">
     <head>
@@ -23,6 +23,29 @@
     			@for(meta <- metas){
     				@if(meta.equals(metas.get(0))){
     						<h2>Semana @meta.getSemana()</h2>
+    						@if(meta.getSemana().equals(1)){
+    							<td>Total: @totalSemana(0) | Cumpridas: @cumpSemana(0) | Não cumpridas: @naoCumpSemana(0)</td>
+    						}else{
+    							@if(meta.getSemana().equals(2)){
+    								<td>Total: @totalSemana(1) | Cumpridas: @cumpSemana(1) | Não cumpridas: @naoCumpSemana(1)</td>
+    							}else{
+    								@if(meta.getSemana().equals(3)){
+    									<td>Total: @totalSemana(2) | Cumpridas: @cumpSemana(2) | Não cumpridas: @naoCumpSemana(2)</td>
+    								}else{
+    									@if(meta.getSemana().equals(4)){
+    										<td>Total: @totalSemana(3) | Cumpridas: @cumpSemana(3) | Não cumpridas: @naoCumpSemana(3)</td>
+    									}else{
+    										@if(meta.getSemana().equals(5)){
+    											<td>Total: @totalSemana(4) | Cumpridas: @cumpSemana(4) | Não cumpridas: @naoCumpSemana(4)</td>
+    										}else{
+    											@if(meta.getSemana().equals(6)){
+    												<td>Total: @totalSemana(5) | Cumpridas: @cumpSemana(5) | Não cumpridas: @naoCumpSemana(5)</td>
+    											}
+    										}
+    									}
+    								}
+    							}
+    						}
     						@if(!meta.isCumprida()){    							
     							<div class="alert alert-info" role="alert" id="successPanel">
     							<p>@meta.getDescricao()</p>
@@ -49,6 +72,29 @@
 	    				}else{ 
 	    					@if(meta.getSemana() != metas.get(metas.indexOf(meta)-1).getSemana()){
 	    						<h1>Semana @meta.getSemana()</h1>
+	    						@if(meta.getSemana().equals(1)){
+    								<td>Total: @totalSemana(0) | Cumpridas: @cumpSemana(0) | Não cumpridas: @naoCumpSemana(0)</td>
+	    						}else{
+	    							@if(meta.getSemana().equals(2)){
+	    								<td>Total: @totalSemana(1) | Cumpridas: @cumpSemana(1) | Não cumpridas: @naoCumpSemana(1)</td>
+	    							}else{
+	    								@if(meta.getSemana().equals(3)){
+	    									<td>Total: @totalSemana(2) | Cumpridas: @cumpSemana(2) | Não cumpridas: @naoCumpSemana(2)</td>
+	    								}else{
+	    									@if(meta.getSemana().equals(4)){
+	    										<td>Total: @totalSemana(3) | Cumpridas: @cumpSemana(3) | Não cumpridas: @naoCumpSemana(3)</td>
+	    									}else{
+	    										@if(meta.getSemana().equals(5)){
+	    											<td>Total: @totalSemana(4) | Cumpridas: @cumpSemana(4) | Não cumpridas: @naoCumpSemana(4)</td>
+	    										}else{
+	    											@if(meta.getSemana().equals(6)){
+	    												<td>Total: @totalSemana(5) | Cumpridas: @cumpSemana(5) | Não cumpridas: @naoCumpSemana(5)</td>
+	    											}
+	    										}
+	    									}
+	    								}
+	    							}
+	    						}
 	    					}
 	    					@if(!meta.isCumprida()){
     							<form method="post" action="@routes.Application.cumprirMeta()">

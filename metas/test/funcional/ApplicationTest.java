@@ -43,6 +43,9 @@ import scala.Option;
 public class ApplicationTest {
 	GenericDAO dao = new GenericDAO();
     List<Meta> metas;
+	private static int[] totalMetasSemana = {0,0,0,0,0,0};
+	private static int[] cumpMetasSemana = {0,0,0,0,0,0};
+	private static int[] naoCumpMetasSemana = {0,0,0,0,0,0};
     int metasCump = controllers.Application.getMetasCump();
 	int metasNaoCump = controllers.Application.getMetasNaoCump();
 	public EntityManager em;
@@ -65,7 +68,7 @@ public class ApplicationTest {
     @Test
     public void renderTemplate() {
     	metas = dao.findAllByClass(Meta.class);
-        Content html = views.html.index.render(metas,metasCump,metasNaoCump);
+        Content html = views.html.index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
         assertThat(contentType(html)).isEqualTo("text/html");
         assertThat(contentAsString(html)).contains("0 meta(s)");
     }

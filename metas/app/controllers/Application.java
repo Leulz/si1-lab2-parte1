@@ -15,13 +15,16 @@ public class Application extends Controller {
 	private static final GenericDAO dao = new GenericDAO();
 	private static Form<Meta> metaForm = Form.form(Meta.class);
 	private static int metasCump, metasNaoCump;
+	private static int[] totalMetasSemana = {0,0,0,0,0,0};
+	private static int[] cumpMetasSemana = {0,0,0,0,0,0};
+	private static int[] naoCumpMetasSemana = {0,0,0,0,0,0};
 	
 	@Transactional
     public static Result index() {
 		List<Meta> metas = dao.findAllByClass(Meta.class);
 		Collections.sort(metas);
         contaCumpridas();
-        return ok(views.html.index.render(metas,metasCump,metasNaoCump));
+        return ok(views.html.index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana));
     }
 	
 	@Transactional
@@ -29,7 +32,7 @@ public class Application extends Controller {
 		Form<Meta> filledForm = metaForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
             List<Meta> result = dao.findAllByClass(Meta.class);
-			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
+			return badRequest(views.html.index.render(result,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana, naoCumpMetasSemana));
 		} else {
             Meta novoMeta = filledForm.get();
             
@@ -49,7 +52,7 @@ public class Application extends Controller {
 		
 		if (filledForm.hasErrors()) {
 			List<Meta> result = dao.findAllByClass(Meta.class);
-			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
+			return badRequest(views.html.index.render(result,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana));
 		} else{
 			long id = Long.parseLong(filledForm.data().get("id"));
 			Meta meta = dao.findByEntityId(Meta.class, id);			
@@ -67,7 +70,7 @@ public class Application extends Controller {
 		Form<Meta> filledForm = metaForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			List<Meta> result = dao.findAllByClass(Meta.class);
-			return badRequest(views.html.index.render(result,metasCump,metasNaoCump));
+			return badRequest(views.html.index.render(result,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana));
 		} else{
 			List<Meta> metas = dao.findAllByClass(Meta.class);
 			if (metas.size()==0)
@@ -78,16 +81,77 @@ public class Application extends Controller {
 			return redirect(routes.Application.index());
 		}
 	}
-	//@Transactional
 	public static void contaCumpridas(){
 		List<Meta> metas = dao.findAllByClass(Meta.class);
 		metasCump=0;
 		metasNaoCump=0;
+		totalMetasSemana = new int[6];
+		cumpMetasSemana = new int[6];
+		naoCumpMetasSemana = new int[6];
+		
 		for (Meta meta : metas) {
-			if (meta.isCumprida())
-				metasCump+=1;
-			else
-				metasNaoCump+=1;
+			switch (meta.getSemana()) {
+				case 1:
+					totalMetasSemana[0]+=1;
+					if (meta.isCumprida()){
+						metasCump+=1;
+						cumpMetasSemana[0]+=1;
+					}else{
+						metasNaoCump+=1;
+						naoCumpMetasSemana[0]+=1;
+					}
+					break;
+				case 2:
+					totalMetasSemana[1]+=1;
+					if (meta.isCumprida()){
+						metasCump+=1;
+						cumpMetasSemana[1]+=1;
+					}else{
+						metasNaoCump+=1;
+						naoCumpMetasSemana[1]+=1;
+					}
+					break;
+				case 3:
+					totalMetasSemana[2]+=1;
+					if (meta.isCumprida()){
+						metasCump+=1;
+						cumpMetasSemana[2]+=1;
+					}else{
+						metasNaoCump+=1;
+						naoCumpMetasSemana[2]+=1;
+					}
+					break;
+				case 4:
+					totalMetasSemana[3]+=1;
+					if (meta.isCumprida()){
+						metasCump+=1;
+						cumpMetasSemana[3]+=1;
+					}else{
+						metasNaoCump+=1;
+						naoCumpMetasSemana[3]+=1;
+					}
+					break;
+				case 5:
+					totalMetasSemana[4]+=1;
+					if (meta.isCumprida()){
+						metasCump+=1;
+						cumpMetasSemana[4]+=1;
+					}else{
+						metasNaoCump+=1;
+						naoCumpMetasSemana[4]+=1;
+					}
+					break;
+				case 6:
+					totalMetasSemana[5]+=1;
+					if (meta.isCumprida()){
+						metasCump+=1;
+						cumpMetasSemana[5]+=1;
+					}else{
+						metasNaoCump+=1;
+						naoCumpMetasSemana[5]+=1;
+					}
+					break;
+			}
 		}
 	}
 	

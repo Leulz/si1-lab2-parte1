@@ -39,6 +39,9 @@ public class IndexViewTest {
 	Meta meta1 = new Meta("Aprender Play",1,1);
 	Meta meta2 = new Meta("Aprender AJAX", 1,2);
 	Meta meta3 = new Meta("Aprender filosofia schopenhaueriana",2,1);
+	private static int[] totalMetasSemana = {0,0,0,0,0,0};
+	private static int[] cumpMetasSemana = {0,0,0,0,0,0};
+	private static int[] naoCumpMetasSemana = {0,0,0,0,0,0};
 	int metasCump = controllers.Application.getMetasCump();
 	int metasNaoCump = controllers.Application.getMetasNaoCump();
     public EntityManager em;
@@ -58,7 +61,7 @@ public class IndexViewTest {
 		dao.persist(meta1);
 		metas = dao.findAllByClass(Meta.class);
 		
-		Html html = index.render(metas,metasCump,metasNaoCump);
+		Html html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Aprender Play");		
 	}
@@ -70,7 +73,7 @@ public class IndexViewTest {
     	
 		metas = dao.findAllByClass(Meta.class);
 		
-		Html html = index.render(metas,metasCump,metasNaoCump);
+		Html html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Semana 1");
 		assertThat(contentAsString(html)).contains("Aprender AJAX");
@@ -87,7 +90,7 @@ public class IndexViewTest {
 		metas = dao.findAllByClass(Meta.class);
 		Collections.sort(metas);
 		
-		Html html = index.render(metas,metasCump,metasNaoCump);
+		Html html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Semana 1");
 		assertThat(contentAsString(html)).contains("Semana 2");
@@ -125,7 +128,7 @@ public class IndexViewTest {
 						.withFormUrlEncodedBody(formData));
 		metas = dao.findAllByClass(Meta.class);
 		assertThat(metas.size()==1).isTrue();
-		Html html = index.render(metas,metasCump,metasNaoCump);
+		Html html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("Aprender Play");
 		
@@ -135,7 +138,7 @@ public class IndexViewTest {
 				.withFormUrlEncodedBody(formData));
 		
 		metas = dao.findAllByClass(Meta.class);
-		html = index.render(metas,metasCump,metasNaoCump);
+		html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).doesNotContain("Aprender Play");		
     }
@@ -149,7 +152,7 @@ public class IndexViewTest {
 		Result result = callAction(controllers.routes.ref.Application.newMeta(), fakeRequest()
 						.withFormUrlEncodedBody(formData));
 		metas = dao.findAllByClass(Meta.class);
-		Html html = index.render(metas,metasCump,metasNaoCump);
+		Html html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("alert-info");		
     }
@@ -171,7 +174,7 @@ public class IndexViewTest {
 		dao.flush();
 		metas = dao.findAllByClass(Meta.class);
 		
-		Html html = index.render(metas,metasCump,metasNaoCump);
+		Html html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentType(html)).isEqualTo("text/html");
 		assertThat(contentAsString(html)).contains("alert-info");
 		
@@ -184,7 +187,7 @@ public class IndexViewTest {
 		dao.merge(meta);
 		dao.flush();
 		metas = dao.findAllByClass(Meta.class);
-		html = index.render(metas,metasCump,metasNaoCump);
+		html = index.render(metas,metasCump,metasNaoCump,totalMetasSemana,cumpMetasSemana,naoCumpMetasSemana);
 		assertThat(contentAsString(html)).contains("alert-success");
 		
     }
