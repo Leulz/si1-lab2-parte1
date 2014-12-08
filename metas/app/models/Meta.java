@@ -79,7 +79,7 @@ public class Meta implements Comparable<Meta>, Serializable {
         
         if (value1==0){
         	int comparePrioridade = ((Meta)outraMeta).getPrioridade();
-        	int value2 = this.getPrioridade()-comparePrioridade;
+        	int value2 = comparePrioridade-this.getPrioridade();
         	return value2;
         }
         
